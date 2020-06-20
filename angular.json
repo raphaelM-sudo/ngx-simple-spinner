@@ -123,6 +123,46 @@
           }
         }
       }
+    },
+    "simple-spinner": {
+      "projectType": "library",
+      "root": "projects/simple-spinner",
+      "sourceRoot": "projects/simple-spinner/src",
+      "prefix": "simple",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/simple-spinner/tsconfig.lib.json",
+            "project": "projects/simple-spinner/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/simple-spinner/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/simple-spinner/src/test.ts",
+            "tsConfig": "projects/simple-spinner/tsconfig.spec.json",
+            "karmaConfig": "projects/simple-spinner/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/simple-spinner/tsconfig.lib.json",
+              "projects/simple-spinner/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }},
   "defaultProject": "ngx-simple-spinner"
 }
