@@ -1,0 +1,39 @@
+{
+  "name": "@nutrify/ngx-simple-spinner",
+  "version": "1.0.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Simple and lightweight, yet customizable spinner/number input module for Angular",
+  "author": "Raphael Michl <raphael.michl@protonmail.com>",
+  "peerDependencies": {
+    "@angular/animations": "^9.0.0-0",
+    "@angular/cdk": "^9.0.0-0",
+    "@angular/core": "^9.0.0-0",
+    "@angular/common": "^9.0.0-0",
+    "@angular/forms": "^9.0.0-0",
+    "@angular/material": "^9.0.0"
+  },
+  "bugs": "https://github.com/raphaelM-sudo/ngx-simple-spinner/issues",
+  "homepage": "https://github.com/raphaelM-sudo/ngx-simple-spinner",
+  "repository": "raphaelM-sudo/ngx-simple-spinner",
+  "license": "MIT",
+  "ngPackage": {
+    "lib": {
+      "entryFile": "src/public-api.ts"
+    },
+    "dest": "../../dist/simple-spinner"
+  },
+  "funding": {
+    "type" : "BuyMeACoffee",
+    "url" : "https://www.buymeacoffee.com/raphaelm"
+  },
+  "keywords": [
+    "angular",
+    "spinner",
+    "number",
+    "input",
+    "picker",
+    "angular2"
+  ]
+}
