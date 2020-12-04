@@ -126,6 +126,11 @@
     },
     "simple-spinner": {
       "projectType": "library",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "projects/simple-spinner",
       "sourceRoot": "projects/simple-spinner/src",
       "prefix": "simple",

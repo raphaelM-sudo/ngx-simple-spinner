@@ -1,0 +1,49 @@
+<div class="simple-spinner-wrapper">
+  <div class="simple-spinner-input-wrapper" (mouseenter)="mouseenter()" (mouseleave)="mouseleave()">
+    <div class="simple-spinner-input">
+      <input #numberInput type="number" [(ngModel)]="value"
+        (change)="checkValue()"
+        (keydown)="filterKey($event)"
+        (paste)="filterPaste($event)"
+        (focus)="focusInput()"
+        (blur)="blurInput()"
+        step="any" min="min" max="max"
+        autocomplete="off">
+    </div>
+    <div *ngIf="showFractionOverlay()" class="simple-spinner-fraction-overlay">
+      <span>{{decimal.precedingStr}} <sup>{{decimal.dividend}}</sup>&frasl;<sub>{{decimal.divisor}}</sub></span>
+    </div>
+  </div>
+
+  <div class="simple-spinner-nav">
+    <div class="simple-spinner-arrow simple-spinner-arrow-up" (mousedown)="add($event)" (mouseup)="stopCount()" (mouseleave)="stopCount()"></div>
+    <div class="simple-spinner-arrow simple-spinner-arrow-down" (mousedown)="subtract($event)" (mouseup)="stopCount()" (mouseleave)="stopCount()"></div>
+  </div>
+</div>
+
+<!--
+<div class="simple-spinner-container">
+  <div class="simple-spinner-overlay">
+    <ng-container *ngIf="true; else fractionless">
+      <span *ngIf="prettyNumber.hasPrecedingDigits" class="simple-spinner-preceding-number">
+        {{prettyNumber.whole}}
+      </span>
+      <sup>{{prettyNumber.dividend}}</sup>&frasl;<sub>{{prettyNumber.divisor}}</sub>
+    </ng-container>
+    <ng-template #fractionless>
+      {{decValue?.toFixed()}}
+    </ng-template>
+  </div>
+  <div [ngClass]="{'doNotShow' : true}">
+    <div class="simple-spinner-input">
+      <input #numberInput type="number" autocomplete="off" [value]="showUI ? inputStr : ''" (keydown)="catchKeyDown($event)" (keyup)="catchKeyUp($event)" (input)="filterInput()" (focus)="focus()" (blur)="blur()">
+    </div>
+
+  </div>
+</div>
+
+<div class="simple-spinner-nav" (mouseleave)="stopFunctionality()">
+  <div class="simple-spinner-arrow simple-spinner-arrow-up" (mousedown)="add($event)" (mouseup)="stopFunctionality()" (mouseenter)="hoveredAdd = true" (mouseleave)="hoveredAdd = false"></div>
+  <div class="simple-spinner-arrow simple-spinner-arrow-down" (mousedown)="subtract($event)" (mouseup)="stopFunctionality()" (mouseenter)="hoveredSubtract = true" (mouseleave)="hoveredSubtract = false"></div>
+</div>
+-->

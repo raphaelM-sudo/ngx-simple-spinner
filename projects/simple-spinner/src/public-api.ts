@@ -3,3 +3,4 @@
  */
 
 export * from './lib/simple-spinner.module';
+export { SpinnerComponent } from './lib/components/spinner/spinner.component';
