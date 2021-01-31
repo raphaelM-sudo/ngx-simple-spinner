@@ -9,6 +9,7 @@ export class AppComponent implements OnInit {
 
   title = 'ngx-simple-spinner';
   version = VERSION.full;
+  value = 10.5;
 
   ngOnInit() {
     // tslint:disable-next-line: no-console

@@ -78,6 +78,9 @@ export class SimpleDecimal {
   }
 
   set value(value: number) {
+
+    this._value = null;
+
     if (value != null) {
       this._value = +Number(value).toFixedNoRounding(this.maxDecimalPlaces);
     }
@@ -164,7 +167,7 @@ export class SimpleDecimal {
 
     multiple = +multiple.toFixed(this.maxDecimalPlaces);
 
-    if (multiple > 0 && this.value !== null) {
+    if (multiple > 0 && this.value != null) {
 
       let quotient = +(this.decimalPart / multiple).toFixed(this.maxDecimalPlaces);
 

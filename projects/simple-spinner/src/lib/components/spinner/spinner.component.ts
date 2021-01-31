@@ -1,41 +1,60 @@
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
-    ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef, Input, OnInit,
-    ViewChild, ViewEncapsulation
+    Attribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, ElementRef, Input,
+    Optional, Self, ViewChild, ViewEncapsulation
 } from '@angular/core';
-import {
-    ControlValueAccessor, FormGroupDirective, NG_VALUE_ACCESSOR, NgControl, NgForm
-} from '@angular/forms';
+import { ControlValueAccessor, FormGroupDirective, NgControl, NgForm } from '@angular/forms';
 import {
     CanDisable, CanDisableCtor, CanUpdateErrorState, CanUpdateErrorStateCtor, ErrorStateMatcher,
     HasTabIndex, HasTabIndexCtor, mixinDisabled, mixinErrorState, mixinTabIndex
 } from '@angular/material/core';
 
 import { Round, SimpleDecimal } from '../../models/decimal.model';
+import { DeviceService } from '../../services/device/device.service';
 import { SpinnerKeyManager } from '../a11y/key-manager/spinner-key-manager';
+
+let nextUniqueId = 0;
 
 export const BUFFER_TIMEOUT = 250;
 export const TIMEOUT = 50;
+
+class SimpleSpinnerBase {
+  constructor(public _elementRef: ElementRef,
+              public _defaultErrorStateMatcher: ErrorStateMatcher,
+              public _parentForm: NgForm,
+              public _parentFormGroup: FormGroupDirective,
+              public ngControl: NgControl) {}
+}
+
+const _SimpleSpinnerMixinBase:
+    CanDisableCtor &
+    HasTabIndexCtor &
+    CanUpdateErrorStateCtor &
+    typeof SimpleSpinnerBase = mixinTabIndex(mixinDisabled(mixinErrorState(SimpleSpinnerBase)));
 
 @Component({
   selector: 'simple-spinner',
   exportAs: 'simpleSpinner',
   templateUrl: './spinner.component.html',
+  inputs: ['disabled', 'tabIndex'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SpinnerComponent),
-      multi: true
-    }
-  ],
-  // tslint:disable-next-line: no-host-metadata-property
   host: {
+    '[attr.id]': 'id',
+    '[attr.tabindex]': 'tabIndex',
     class: 'simple-spinner',
+    role: 'input',
+    '[attr.aria-label]': 'ariaLabel',
+    '[attr.aria-required]': 'required.toString()',
+    '[attr.aria-disabled]': 'disabled.toString()',
+    '[attr.aria-invalid]': 'errorState',
+    '[class.simple-disabled]': 'disabled',
+    '[class.simple-required]': 'required',
     '(keydown)': 'keyManager.catchKey($event)'
   }
 })
-export class SpinnerComponent implements OnInit, ControlValueAccessor {
+export class SpinnerComponent extends _SimpleSpinnerMixinBase
+implements ControlValueAccessor, DoCheck, CanDisable, HasTabIndex, CanUpdateErrorState {
 
   @Input('aria-label') private _ariaLabel?: string;
   @Input() placeholder?: string;
@@ -44,38 +63,54 @@ export class SpinnerComponent implements OnInit, ControlValueAccessor {
   @Input() dir?: 'ltr' | 'rtl' | 'auto';
   @Input() bigStep = 1;
   @Input() smallStep = 0.25;
-  @Input() maxDecimalPlaces = 3;
+  @Input() maxDecimalPlaces = 2;
   @Input() errorStateMatcher: ErrorStateMatcher;
 
   @Input()
-  get min(): number {
-    return this._min;
+  get id(): string { return this._id; }
+  set id(id: string) {
+    this._id = id || this.uid;
   }
 
+  @Input()
+  get required(): boolean { return this._required; }
+  set required(value: boolean) {
+    this._required = coerceBooleanProperty(value);
+  }
+
+  @Input()
+  get min(): number { return this._min; }
   set min(min: number) {
     if (min != null) {
-      this._min = Number(min);
+      min = parseFloat(min as unknown as string);
+
+      if (!isNaN(min)) {
+        this._min = min;
+      }
     }
   }
 
   @Input()
-  get max(): number {
-    return this._max;
-  }
-
+  get max(): number { return this._max; }
   set max(max: number) {
     if (max != null) {
-      this._max = Number(max);
+      max = parseFloat(max as unknown as string);
+
+      if (!isNaN(max)) {
+        this._max = max;
+      }
     }
   }
 
   @Input()
-  get value(): number {
-    return this.decimal.value;
-  }
-
+  get value(): number { return this.decimal.value; }
   set value(value: number) {
     this.decimal.value = value;
+    this.propagateChange(value);
+  }
+
+  get ariaLabel(): string | null {
+    return this._ariaLabel || this.placeholder;
   }
 
   @ViewChild('numberInput', { static: true }) numberInput: ElementRef;
@@ -87,22 +122,36 @@ export class SpinnerComponent implements OnInit, ControlValueAccessor {
   focus = false;
   intervalHandler = null;
   filterKeyRegex = /^[0-9.,\-]+$/;
-  filterPasteRegex = /^\-?([1-9]+\d*|\d+[.,]\d+)$/;
+  filterPasteRegex = /^\-?([1-9]+\d*|\d+[.,]\d+|0)$/;
 
+  private _id: string;
+  private _required = false;
   private _min = Number.MIN_SAFE_INTEGER;
   private _max = Number.MAX_SAFE_INTEGER;
+
+  private uid = `simple-spinner-${++nextUniqueId}`;
 
   propagateChange = (_: any) => {};
   propagateTouched = () => {};
 
   checkValue() {
     // This has to be done over the ElementRef because Angular won't emit a change if the value stays the same
-    this.decimal.value = Math.min(Math.max(this.decimal.value, this.min), this.max);
-    this.numberInput.nativeElement.value = this.decimal.value;
+    const value = parseFloat(this.numberInput.nativeElement.value);
+    this.value = isNaN(value) ? null : Math.min(Math.max(value, this.min), this.max);
+    this.numberInput.nativeElement.value = this.value;
+    this.propagateTouched();
   }
 
   filterKey(event: KeyboardEvent) {
-    if (!event.ctrlKey && !event.metaKey && !event.altKey && event.key !== event.code && !event.key.match(this.filterKeyRegex)) {
+    if (
+        !event.ctrlKey &&
+        !event.metaKey &&
+        !event.altKey &&
+        event.code !== '' && // On Chrome for Android the code is empty
+        event.key !== event.code &&
+        !event.key.match(this.filterKeyRegex)
+      ) {
+
       event.preventDefault();
     }
   }
@@ -114,6 +163,16 @@ export class SpinnerComponent implements OnInit, ControlValueAccessor {
   }
 
   increment() {
+
+    // Special logic for increment only, in case the value is null / undefined
+    if (this.decimal.value == null) {
+      this.decimal.value = this.min;
+
+      this.propagateChange(this.decimal.value);
+      this.cdRef.markForCheck();
+
+      return;
+    }
 
     if (this.decimal.value < this.max) {
       // If an integer and less or equal to max - 1
@@ -143,6 +202,16 @@ export class SpinnerComponent implements OnInit, ControlValueAccessor {
   }
 
   decrement() {
+
+    // Special logic for decrement only, in case the value is null / undefined
+    if (this.decimal.value == null) {
+      this.decimal.value = this.max;
+
+      this.propagateChange(this.decimal.value);
+      this.cdRef.markForCheck();
+
+      return;
+    }
 
     if (this.decimal.value > this.min) {
       // If an integer and greater or equal than min + 1
@@ -227,24 +296,56 @@ export class SpinnerComponent implements OnInit, ControlValueAccessor {
     return this.decimal.hasPrettyFraction && !this.hover && !this.focus;
   }
 
-  constructor(private cdRef: ChangeDetectorRef) {
-    this.decimal = new SimpleDecimal(this.maxDecimalPlaces);
-    this.keyManager = new SpinnerKeyManager(this);
-  }
-
-  ngOnInit() {  }
-
   writeValue(value: number): void {
-    if (value !== null) {
+    if (value != null) {
       this.value = value;
     }
   }
 
   registerOnChange(fn: () => void): void {
-
+    this.propagateChange = fn;
   }
 
-  registerOnTouched(fn: () => void): void {  }
+  registerOnTouched(fn: () => void): void {
+    this.propagateTouched = fn;
+  }
 
-  setDisabledState?(isDisabled: boolean): void {  }
+  setDisabledState?(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
+
+  ngDoCheck() {
+    if (this.ngControl) {
+      this.updateErrorState();
+    }
+  }
+
+  constructor(
+    private cdRef: ChangeDetectorRef,
+    public device: DeviceService,
+    elementRef: ElementRef,
+    _defaultErrorStateMatcher: ErrorStateMatcher,
+    @Optional() _parentForm: NgForm,
+    @Optional() _parentFormGroup: FormGroupDirective,
+    @Self() @Optional() public ngControl: NgControl,
+    @Attribute('tabindex') tabIndex: string) {
+
+    super(elementRef, _defaultErrorStateMatcher, _parentForm,
+      _parentFormGroup, ngControl);
+
+    if (this.ngControl) {
+      // Note: we provide the value accessor through here, instead of
+      // the `providers` to avoid running into a circular import.
+      // It has to be done this way also, to be able to access the errorState.
+      this.ngControl.valueAccessor = this;
+    }
+
+    this.decimal = new SimpleDecimal(this.maxDecimalPlaces);
+    this.keyManager = new SpinnerKeyManager(this);
+
+    this.tabIndex = parseInt(tabIndex, 10) || 0;
+
+    // Force setter to be called in case id was not specified.
+    this.id = this.id;
+  }
 }
