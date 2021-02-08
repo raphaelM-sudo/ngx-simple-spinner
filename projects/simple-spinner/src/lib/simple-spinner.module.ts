@@ -3,10 +3,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { SpinnerComponent } from './components/spinner/spinner.component';
+import { InternationalNumberPipe } from './pipes/international-number.pipe';
 import { DeviceService } from './services/device/device.service';
 
 @NgModule({
-  declarations: [SpinnerComponent],
+  declarations: [SpinnerComponent, InternationalNumberPipe],
   imports: [
     CommonModule,
     FormsModule
@@ -14,6 +15,6 @@ import { DeviceService } from './services/device/device.service';
   providers: [
     DeviceService
   ],
-  exports: [SpinnerComponent, FormsModule]
+  exports: [SpinnerComponent, FormsModule, InternationalNumberPipe]
 })
 export class SimpleSpinnerModule { }

@@ -63,9 +63,33 @@ footer {
 .container-content {
   display: block;
   margin: 2.5em 0 2.5em;
+  font-size: 1.1rem;
+  line-height: 1.1rem;
 
-  .simple-spinner {
-    max-width: 25em;
+  .example {
+
+    margin-bottom: 2.5em;
+
+    code {
+      display: block;
+      font-size: 1.25em;
+      background: #999999;
+      border-radius: 5px;
+      color: white;
+      padding-left: 1em;
+      padding-right: 1em;
+      padding-top: .2em;
+      padding-bottom: .2em;
+      word-wrap: break-word;
+      margin: 1em;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .simple-spinner {
+      width: 7em;
+      max-width: 25em;
+    }
   }
 }
 

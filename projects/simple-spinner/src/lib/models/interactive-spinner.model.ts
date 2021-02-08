@@ -1,4 +1,4 @@
 export interface IInteractiveSpinner {
-  add(event: Event, once?: boolean): void;
-  subtract(event: Event, once?: boolean): void;
+  add(once?: boolean): void;
+  subtract(once?: boolean): void;
 }

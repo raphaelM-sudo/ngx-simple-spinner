@@ -22,10 +22,11 @@ export enum Round {
 
 export class SimpleDecimal {
 
+  private _value: number;
+  private _maxDecimalPlacesFn: () => number;
   private _integerPart: number;
   private _dividend: number;
   private _divisor: number;
-  private _value: number;
 
   get integerPart(): number {
     if (this._integerPart == null) {
@@ -88,6 +89,10 @@ export class SimpleDecimal {
     this._integerPart = null;
     this._dividend = null;
     this._divisor = null;
+  }
+
+  get maxDecimalPlaces(): number {
+    return this._maxDecimalPlacesFn();
   }
 
   get hasPrettyFraction(): boolean {
@@ -186,7 +191,8 @@ export class SimpleDecimal {
     return this.value;
   }
 
-  constructor(public maxDecimalPlaces = 2, value: number = null) {
+  constructor(maxDecimalPlaces: (() => number) | number, value: number = null) {
+    this._maxDecimalPlacesFn = maxDecimalPlaces instanceof Function ? maxDecimalPlaces : () => maxDecimalPlaces;
     this.value = value;
   }
 }
