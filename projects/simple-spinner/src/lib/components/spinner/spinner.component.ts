@@ -225,7 +225,6 @@ implements ControlValueAccessor, DoCheck, CanDisable, HasTabIndex, CanUpdateErro
     const value = parseFloat(this.numberInput.nativeElement.value);
     this.value = isNaN(value) ? null : Math.min(Math.max(value, this.min), this.max);
     this.numberInput.nativeElement.value = this.value;
-    this.propagateTouched();
   }
 
   filterKey(event: KeyboardEvent) {
@@ -398,7 +397,12 @@ implements ControlValueAccessor, DoCheck, CanDisable, HasTabIndex, CanUpdateErro
     this.focus = true;
   }
 
+  changeInput() {
+    this.propagateTouched();
+  }
+
   blurInput() {
+    this.checkValue();
     this.focus = false;
   }
 
