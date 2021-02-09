@@ -1,5 +1,7 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { SimpleSpinnerModule } from 'projects/simple-spinner/src/public-api';
+
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 
@@ -8,7 +10,8 @@ import { AppComponent } from './app.component';
     AppComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    SimpleSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

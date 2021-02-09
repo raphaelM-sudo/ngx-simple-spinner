@@ -12,6 +12,12 @@
       "element",
       "simple",
       "kebab-case"
-    ]
+    ],
+    "variable-name": [
+      true,
+      "allow-leading-underscore"
+    ],
+    "no-input-rename": false,
+    "no-output-rename": false
   }
 }

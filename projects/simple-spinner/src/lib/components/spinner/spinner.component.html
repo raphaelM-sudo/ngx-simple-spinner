@@ -1,0 +1,32 @@
+<div [ngClass]="{
+    'simple-spinner-border': showBorder,
+    'simple-spinner-invalid': errorState,
+    'simple-spinner-rtl': direction === Direction.RightToLeft,
+    'simple-spinner-ltr': direction === Direction.LeftToRight
+  }" class="simple-spinner-wrapper" (mouseenter)="mouseenter()" (mouseleave)="mouseleave()">
+  <div class="simple-spinner-input-wrapper">
+    <div *ngIf="showPlaceholder" class="simple-spinner-placeholder">
+      <span>{{placeholder}}</span>
+    </div>
+    <div [hidden]="showFractionOverlay" class="simple-spinner-input">
+      <input #numberInput type="number"
+        [value]="value"
+        (change)="checkValue()"
+        (keydown)="filterKey($event)"
+        (focus)="focusInput()"
+        (blur)="blurInput()"
+        step="any"
+        autocomplete="off"
+        [disabled]="disabled">
+    </div>
+    <div *ngIf="showFractionOverlay" class="simple-spinner-fraction-overlay">
+      <span dir="ltr">{{decimal.precedingStr | i18nNumber:i18nNumbers}}
+        <sup dir="ltr">{{decimal.dividend | i18nNumber:i18nNumbers}}</sup>&frasl;<sub dir="ltr">{{decimal.divisor | i18nNumber:i18nNumbers}}</sub>
+      </span>
+    </div>
+  </div>
+  <div *ngIf="showNav" class="simple-spinner-nav">
+    <button [disabled]="disabled" class="simple-spinner-arrow simple-spinner-arrow-up" (mousedown)="add()" (mouseup)="stopCount()" (mouseleave)="stopCount()"></button>
+    <button [disabled]="disabled" class="simple-spinner-arrow simple-spinner-arrow-down" (mousedown)="subtract()" (mouseup)="stopCount()" (mouseleave)="stopCount()"></button>
+  </div>
+</div>

@@ -2,7 +2,7 @@ import * as del from 'del';
 import * as fs from 'fs';
 import { copySync } from 'fs-extra';
 import { ngPackagr } from 'ng-packagr';
-import * as sass from 'node-sass';
+import * as sass from 'sass';
 import { join } from 'path';
 
 async function main() {

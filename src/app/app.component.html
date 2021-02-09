@@ -7,7 +7,30 @@
 <div class="container">
 
   <div class="container-content">
-    Work in progress
+    <div class="example">
+      <simple-spinner min="1" max="100"></simple-spinner>
+      <code>min="1" max="100"</code>
+    </div>
+    <div class="example">
+      <simple-spinner [(ngModel)]="value1" min="1" max="100" required></simple-spinner>
+      <code>[(ngModel)]="value1" min="1" max="100" required</code>
+    </div>
+    <div class="example">
+      <simple-spinner [(ngModel)]="value2" min="1" max="100" smallStep="0.25" maxDecimalPlaces="2" fractions="true" hoverNav="false"></simple-spinner>
+      <code>[(ngModel)]="value2" min="1" max="100" smallStep="0.25" maxDecimalPlaces="2" fractions="true" hoverNav="false"</code>
+    </div>
+    <div class="example">
+      <simple-spinner [(ngModel)]="value3" min="1" max="100" smallStep="0.25" maxDecimalPlaces="2" fractions="true" hoverBorder="true" placeholder="Placeholder" required></simple-spinner>
+      <code>[(ngModel)]="value3" min="1" max="100" smallStep="0.25" maxDecimalPlaces="2" fractions="true" hoverBorder="true" placeholder="Placeholder" required</code>
+    </div>
+    <div class="example">
+      <simple-spinner [(ngModel)]="value4" min="1" max="100" smallStep="0.25" maxDecimalPlaces="2" fractions="true" disabled></simple-spinner>
+      <code>[(ngModel)]="value4" min="1" max="100" smallStep="0.25" maxDecimalPlaces="2" fractions="true" disabled</code>
+    </div>
+    <div class="example">
+      <simple-spinner [(ngModel)]="value5" min="1" max="100" smallStep="0.25" maxDecimalPlaces="2" fractions="true" dir="rtl"></simple-spinner>
+      <code>[(ngModel)]="value5" min="1" max="100" smallStep="0.25" maxDecimalPlaces="2" fractions="true" dir="rtl"</code>
+    </div>
   </div>
 
   <div class="buy-me-a-coffee">

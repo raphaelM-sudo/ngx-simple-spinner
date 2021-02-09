@@ -12,7 +12,7 @@
     "@angular/core": "^9.0.0-0",
     "@angular/common": "^9.0.0-0",
     "@angular/forms": "^9.0.0-0",
-    "@angular/material": "^9.0.0"
+    "@angular/material": "^9.0.0-0"
   },
   "bugs": "https://github.com/raphaelM-sudo/ngx-simple-spinner/issues",
   "homepage": "https://github.com/raphaelM-sudo/ngx-simple-spinner",
@@ -28,9 +28,13 @@
     "type" : "BuyMeACoffee",
     "url" : "https://www.buymeacoffee.com/raphaelm"
   },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  },
   "keywords": [
     "angular",
     "spinner",
+    "number-input",
     "number",
     "input",
     "picker",

@@ -1,0 +1,233 @@
+$simple-spinner-background-color:       #ffffff !default;
+$simple-spinner-placeholder-color:      #555555 !default;
+$simple-spinner-border-color:           lighten(#999999, 25%) !default;
+$simple-spinner-disabled-color:         lighten($simple-spinner-border-color, 11%) !default;
+$simple-spinner-invalid-color:          rgba(255, 0, 0, .5) !default;
+$simple-spinner-nav-hover-bg-color:     $simple-spinner-border-color !default;
+$simple-spinner-nav-active-bg-color:    darken($simple-spinner-border-color, 11%) !default;
+
+$simple-spinner-min-width:              2.25em !default;
+$simple-spinner-min-height:             2em !default;
+$simple-spinner-arrow-width:            8px !default;
+$simple-spinner-border-width:           1px !default;
+$simple-spinner-input-margin:           2px !default;
+$simple-spinner-nav-padding:            2px !default;
+$simple-spinner-nav-min-width:          1.25em !default;
+$simple-spinner-arrow-up:               url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 16 16' version='1.1'%3E%3Cg id='surface1'%3E%3Cpath style=' stroke:none;fill-rule:nonzero;fill:rgb(0%25,0%25,0%25);fill-opacity:0.7;' d='M 0 12 L 8 4 L 16 12 Z M 0 4 '/%3E%3C/g%3E%3C/svg%3E") !default;
+$simple-spinner-arrow-down:             url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 16 16' version='1.1'%3E%3Cg id='surface1'%3E%3Cpath style=' stroke:none;fill-rule:nonzero;fill:rgb(0%25,0%25,0%25);fill-opacity:0.7;' d='M 0 4 L 8 12 L 16 4 Z M 0 4 '/%3E%3C/g%3E%3C/svg%3E%0A") !default;
+
+:root {
+  --simple-spinner-background-color:    #{$simple-spinner-background-color};
+  --simple-spinner-placeholder-color:   #{$simple-spinner-placeholder-color};
+  --simple-spinner-border-color:        #{$simple-spinner-border-color};
+  --simple-spinner-disabled-color:      #{$simple-spinner-disabled-color};
+  --simple-spinner-invalid-color:       #{$simple-spinner-invalid-color};
+  --simple-spinner-nav-hover-bg-color:  #{$simple-spinner-nav-hover-bg-color};
+  --simple-spinner-nav-active-bg-color: #{$simple-spinner-nav-active-bg-color};
+}
+
+@mixin simple-spinner-invalid {
+  box-shadow: 0px #{$simple-spinner-border-width / 2} 5px .1px var(--simple-spinner-invalid-color);
+}
+
+@mixin simple-disabled {
+  * {
+    background-color: var(--simple-spinner-disabled-color);
+    opacity: .85;
+    user-select: none;
+  }
+}
+
+.simple-spinner {
+  display: inline-block;
+  background-color: var(--simple-spinner-background-color);
+
+  height: $simple-spinner-min-height;
+  min-width: $simple-spinner-min-width;
+  min-height: $simple-spinner-min-height;
+  line-height: $simple-spinner-min-height;
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+.simple-spinner .simple-spinner-input {
+
+  input::-webkit-inner-spin-button,
+  input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input:focus{
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+
+  input {
+    -moz-appearance: textfield;
+    font: unset;
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+    line-height: inherit;
+
+    border: none;
+
+    text-shadow: none;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+
+    color: inherit;
+    font-size: inherit;
+    font-family: inherit;
+
+    direction: ltr;
+    text-align: left;
+    padding: 0;
+    padding-left: $simple-spinner-input-margin;
+  }
+}
+
+.simple-spinner-input-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.simple-spinner-fraction-overlay {
+  position: absolute;
+  display: flex;
+  user-select: none;
+  align-items: center;
+  top: 0;
+  bottom: 0;
+  left: $simple-spinner-input-margin;
+  right: 0;
+
+  background-color: var(--simple-spinner-background-color);
+  white-space: nowrap;
+  overflow: hidden;
+
+  span {
+    white-space: nowrap;
+    line-height: inherit;
+
+    sub, sup {
+      line-height: 100%;
+    }
+  }
+}
+
+.simple-spinner-placeholder {
+  position: absolute;
+  display: flex;
+  user-select: none;
+  align-items: center;
+  top: 0;
+  bottom: 0;
+  left: $simple-spinner-input-margin;
+  right: 0;
+
+  background-color: var(--simple-spinner-background-color);
+  white-space: nowrap;
+  overflow: hidden;
+  color: var(--simple-spinner-placeholder-color);
+}
+
+.simple-spinner-wrapper {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  line-height: inherit;
+  border: $simple-spinner-border-width solid transparent;
+  box-sizing: border-box;
+}
+
+.simple-spinner-nav {
+  position: absolute;
+  top: 0;
+  left: auto;
+  right: 0;
+  bottom: 0;
+  padding: $simple-spinner-nav-padding;
+  display: grid;
+  grid-template-columns: 1fr;
+  cursor: default;
+  min-width: $simple-spinner-nav-min-width;
+  background-color: var(--simple-spinner-background-color);
+}
+
+.simple-spinner-arrow {
+  font-size: 100%;
+  font-family: inherit;
+  border: 0;
+  padding: 0;
+  text-decoration: none;
+  background: none;
+  color: inherit;
+  cursor: default;
+  text-align: center;
+  user-select: none;
+  outline: none;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-size: $simple-spinner-arrow-width;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+
+  &:hover:enabled {
+    background-color: var(--simple-spinner-nav-hover-bg-color);
+  }
+
+  &:active:enabled {
+    background-color: var(--simple-spinner-nav-active-bg-color);
+  }
+}
+
+.simple-spinner-border {
+  border: $simple-spinner-border-width solid var(--simple-spinner-border-color);
+}
+
+.simple-spinner-rtl {
+
+  .simple-spinner-nav {
+    left: 0;
+    right: auto;
+  }
+
+  .simple-spinner-fraction-overlay, .simple-spinner-placeholder {
+    left: auto;
+    right: $simple-spinner-input-margin;
+  }
+
+  .simple-spinner-input input {
+    text-align: right;
+    padding-left: 0;
+    padding-right: $simple-spinner-input-margin;
+  }
+}
+
+.simple-spinner-arrow-up {
+  background-image: $simple-spinner-arrow-up;
+}
+
+.simple-spinner-arrow-down {
+  background-image: $simple-spinner-arrow-down;
+}
+
+.simple-disabled {
+  @include simple-disabled;
+}
+
+.simple-spinner-invalid {
+  @include simple-spinner-invalid;
+}
