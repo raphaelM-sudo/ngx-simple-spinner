@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { LanguageService } from '../services/language/language.service';
 
-@Pipe({ name: 'iNumber' })
+@Pipe({ name: 'i18nNumber' })
 export class InternationalNumberPipe implements PipeTransform {
 
   private _offset: number;
@@ -21,8 +21,13 @@ export class InternationalNumberPipe implements PipeTransform {
     }
   }
 
-  transform(number: string | number): string {
+  transform(number: string | number, apply = true): string {
     const numStr = String(number);
+
+    // Condition whether or not to apply the transformation
+    if (!apply) {
+      return numStr;
+    }
 
     /*
     European             U+0030..U+0039   0123456789

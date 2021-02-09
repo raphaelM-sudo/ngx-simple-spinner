@@ -120,6 +120,12 @@ implements ControlValueAccessor, DoCheck, CanDisable, HasTabIndex, CanUpdateErro
   }
 
   @Input()
+  get i18nNumbers(): boolean { return this._i18nNumbers; }
+  set i18nNumbers(i18nNumbers: boolean) {
+    this._i18nNumbers = coerceBooleanProperty(i18nNumbers);
+  }
+
+  @Input()
   get bigStep(): number { return this._bigStep ; }
   set bigStep(bigStep: number) {
     bigStep = coerceNumberProperty(bigStep);
@@ -199,6 +205,7 @@ implements ControlValueAccessor, DoCheck, CanDisable, HasTabIndex, CanUpdateErro
   private _hoverBorder = false;
   private _hoverNav = true;
   private _fractions = false;
+  private _i18nNumbers = true;
   private _bigStep = 1;
   private _smallStep = 1;
   private _maxDecimalPlaces = 0;

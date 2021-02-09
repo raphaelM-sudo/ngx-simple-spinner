@@ -8,11 +8,11 @@
   "author": "Raphael Michl <raphael.michl@protonmail.com>",
   "peerDependencies": {
     "@angular/animations": "^9.0.0-0",
-    "@angular/cdk": "^9.0.0-0",
+    "@angular/cdk": "9.2.4",
     "@angular/core": "^9.0.0-0",
     "@angular/common": "^9.0.0-0",
     "@angular/forms": "^9.0.0-0",
-    "@angular/material": "^9.0.0"
+    "@angular/material": "9.2.4"
   },
   "bugs": "https://github.com/raphaelM-sudo/ngx-simple-spinner/issues",
   "homepage": "https://github.com/raphaelM-sudo/ngx-simple-spinner",

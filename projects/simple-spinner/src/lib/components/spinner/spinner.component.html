@@ -8,7 +8,7 @@
     <div *ngIf="showPlaceholder" class="simple-spinner-placeholder">
       <span>{{placeholder}}</span>
     </div>
-    <div class="simple-spinner-input">
+    <div [hidden]="showFractionOverlay" class="simple-spinner-input">
       <input #numberInput type="number"
         [value]="value"
         (change)="checkValue()"
@@ -20,7 +20,9 @@
         [disabled]="disabled">
     </div>
     <div *ngIf="showFractionOverlay" class="simple-spinner-fraction-overlay">
-      <span dir="ltr">{{decimal.precedingStr | iNumber}} <sup dir="ltr">{{decimal.dividend | iNumber}}</sup>&frasl;<sub dir="ltr">{{decimal.divisor | iNumber}}</sub></span>
+      <span dir="ltr">{{decimal.precedingStr | i18nNumber:i18nNumbers}}
+        <sup dir="ltr">{{decimal.dividend | i18nNumber:i18nNumbers}}</sup>&frasl;<sub dir="ltr">{{decimal.divisor | i18nNumber:i18nNumbers}}</sub>
+      </span>
     </div>
   </div>
   <div *ngIf="showNav" class="simple-spinner-nav">

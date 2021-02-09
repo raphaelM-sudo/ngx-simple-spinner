@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { SpinnerComponent } from './components/spinner/spinner.component';
-import { InternationalNumberPipe } from './pipes/international-number.pipe';
+import { InternationalNumberPipe } from './pipes/i18n-number.pipe';
 import { DeviceService } from './services/device/device.service';
 
 @NgModule({

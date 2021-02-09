@@ -1,7 +1,6 @@
-import { SimpleSpinnerModule } from 'projects/simple-spinner/src/lib/simple-spinner.module';
+import { SimpleSpinnerModule } from 'projects/simple-spinner/src/public-api';
 
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -12,7 +11,6 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    ReactiveFormsModule,
     SimpleSpinnerModule
   ],
   providers: [],
