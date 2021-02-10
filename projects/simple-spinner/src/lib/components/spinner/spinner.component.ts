@@ -28,6 +28,7 @@ class SimpleSpinnerBase {
               public ngControl: NgControl) {}
 }
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const _SimpleSpinnerMixinBase:
     CanDisableCtor &
     HasTabIndexCtor &
@@ -58,10 +59,10 @@ const _SimpleSpinnerMixinBase:
 export class SpinnerComponent extends _SimpleSpinnerMixinBase
 implements ControlValueAccessor, DoCheck, CanDisable, HasTabIndex, CanUpdateErrorState {
 
-  @Input('aria-label') private _ariaLabel?: string;
   @Input() placeholder?: string;
   @Input() dir?: 'ltr' | 'rtl' | 'auto';
   @Input() errorStateMatcher: ErrorStateMatcher;
+  @Input('aria-label') private _ariaLabel?: string;
 
   @Input()
   get id(): string { return this._id; }
@@ -154,13 +155,13 @@ implements ControlValueAccessor, DoCheck, CanDisable, HasTabIndex, CanUpdateErro
   get direction(): Direction {
     switch (this.dir) {
       case 'ltr':
-        return Direction.LeftToRight;
+        return Direction.leftToRight;
       case 'rtl':
-        return Direction.RightToLeft;
+        return Direction.rightToLeft;
       case 'auto':
-        return this.langService.isRTLpreferred() ? Direction.RightToLeft : Direction.LeftToRight;
+        return this.langService.isRTLpreferred() ? Direction.rightToLeft : Direction.leftToRight;
       default:
-        return Direction.Default;
+        return Direction.default;
     }
   }
 
@@ -187,6 +188,7 @@ implements ControlValueAccessor, DoCheck, CanDisable, HasTabIndex, CanUpdateErro
     return this._ariaLabel || this.placeholder;
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   @ViewChild('numberInput', { static: true }) numberInput: ElementRef;
 
   decimal: SimpleDecimal;
@@ -196,8 +198,12 @@ implements ControlValueAccessor, DoCheck, CanDisable, HasTabIndex, CanUpdateErro
   focus = false;
   intervalHandler = null;
   // Regex allows all numerals (0-9, Arabic, Hindi, Thai, ...) and commas
-  // tslint:disable-next-line: max-line-length
+  // eslint-disable-next-line max-len
   filterKeyRegex = /^[0-9\u0660-\u0669\u06F0-\u06F9\u0966-\u096F\u0A66-\u0A6F\u0AE6-\u0AEF\u0B66-\u0B6F\u09E6-\u09EF\u0BE6-\u0BEF\u0C66-\u0C6F\u0CE6-\u0CEF\u0D66-\u0D6F\u0DE6-\u0DEF\u1040-\u1049\u17E0-\u17E9\u0E50-\u0E59\u0ED0-\u0ED9\u1810-\u1819\u0F20-\u0F29.,\-]+$/;
+
+  // Enum for usage in template
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  Direction = Direction;
 
   private _id: string;
   private _min = Number.MIN_SAFE_INTEGER;
@@ -213,8 +219,35 @@ implements ControlValueAccessor, DoCheck, CanDisable, HasTabIndex, CanUpdateErro
 
   private uid = `simple-spinner-${++nextUniqueId}`;
 
-  // Enum for usage in template
-  Direction = Direction;
+  constructor(
+    public device: DeviceService,
+    elementRef: ElementRef,
+    _defaultErrorStateMatcher: ErrorStateMatcher,
+    @Optional() _parentForm: NgForm,
+    @Optional() _parentFormGroup: FormGroupDirective,
+    @Self() @Optional() public ngControl: NgControl,
+    @Attribute('tabindex') tabIndex: string,
+    private cdRef: ChangeDetectorRef,
+    private langService: LanguageService) {
+
+    super(elementRef, _defaultErrorStateMatcher, _parentForm,
+      _parentFormGroup, ngControl);
+
+    if (this.ngControl) {
+      // Note: we provide the value accessor through here, instead of
+      // the `providers` to avoid running into a circular import.
+      // It has to be done this way also, to be able to access the errorState.
+      this.ngControl.valueAccessor = this;
+    }
+
+    this.decimal = new SimpleDecimal(() => this.maxDecimalPlaces);
+    this.keyManager = new SpinnerKeyManager(this);
+
+    this.tabIndex = parseInt(tabIndex, 10) || 0;
+
+    // Force setter to be called in case id was not specified.
+    this.id = this.id;
+  }
 
   propagateChange = (_: any) => {};
   propagateTouched = () => {};
@@ -279,7 +312,7 @@ implements ControlValueAccessor, DoCheck, CanDisable, HasTabIndex, CanUpdateErro
       } else { // Float value or greater than max - 1
 
         // Next closest value plus step: 0.6 -> 0.75 -> 1 ...
-        const stepValue = this.decimal.toNearest(this.smallStep, Round.Up);
+        const stepValue = this.decimal.toNearest(this.smallStep, Round.up);
 
         // If less or equal to max then set the value to the new stepValue
         if (stepValue <= this.max) {
@@ -335,7 +368,7 @@ implements ControlValueAccessor, DoCheck, CanDisable, HasTabIndex, CanUpdateErro
       } else { // Float value or smaller than min + 1
 
         // Next closest value minus step: 0.6 -> 0.5 -> 0.25 ...
-        const stepValue = this.decimal.toNearest(this.smallStep, Round.Down);
+        const stepValue = this.decimal.toNearest(this.smallStep, Round.down);
 
         // If greater or equal to min then set the value to the new stepValue
         if (stepValue >= this.min) {
@@ -426,35 +459,5 @@ implements ControlValueAccessor, DoCheck, CanDisable, HasTabIndex, CanUpdateErro
     if (this.ngControl) {
       this.updateErrorState();
     }
-  }
-
-  constructor(
-    private cdRef: ChangeDetectorRef,
-    private langService: LanguageService,
-    public device: DeviceService,
-    elementRef: ElementRef,
-    _defaultErrorStateMatcher: ErrorStateMatcher,
-    @Optional() _parentForm: NgForm,
-    @Optional() _parentFormGroup: FormGroupDirective,
-    @Self() @Optional() public ngControl: NgControl,
-    @Attribute('tabindex') tabIndex: string) {
-
-    super(elementRef, _defaultErrorStateMatcher, _parentForm,
-      _parentFormGroup, ngControl);
-
-    if (this.ngControl) {
-      // Note: we provide the value accessor through here, instead of
-      // the `providers` to avoid running into a circular import.
-      // It has to be done this way also, to be able to access the errorState.
-      this.ngControl.valueAccessor = this;
-    }
-
-    this.decimal = new SimpleDecimal(() => this.maxDecimalPlaces);
-    this.keyManager = new SpinnerKeyManager(this);
-
-    this.tabIndex = parseInt(tabIndex, 10) || 0;
-
-    // Force setter to be called in case id was not specified.
-    this.id = this.id;
   }
 }

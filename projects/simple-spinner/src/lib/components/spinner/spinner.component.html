@@ -1,8 +1,8 @@
 <div [ngClass]="{
     'simple-spinner-border': showBorder,
     'simple-spinner-invalid': errorState,
-    'simple-spinner-rtl': direction === Direction.RightToLeft,
-    'simple-spinner-ltr': direction === Direction.LeftToRight
+    'simple-spinner-rtl': direction === Direction.rightToLeft,
+    'simple-spinner-ltr': direction === Direction.leftToRight
   }" class="simple-spinner-wrapper" (mouseenter)="mouseenter()" (mouseleave)="mouseleave()">
   <div class="simple-spinner-input-wrapper">
     <div *ngIf="showPlaceholder" class="simple-spinner-placeholder">

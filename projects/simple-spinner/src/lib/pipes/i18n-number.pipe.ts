@@ -21,8 +21,8 @@ export class InternationalNumberPipe implements PipeTransform {
     }
   }
 
-  transform(number: string | number, apply = true): string {
-    const numStr = String(number);
+  transform(num: string | number, apply = true): string {
+    const numStr = String(num);
 
     // Condition whether or not to apply the transformation
     if (!apply) {
@@ -40,7 +40,7 @@ export class InternationalNumberPipe implements PipeTransform {
 
     let transformedNumStr = '';
 
-    // tslint:disable-next-line: prefer-for-of
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < numStr.length; i++) {
       const charCode = numStr.charCodeAt(i);
 

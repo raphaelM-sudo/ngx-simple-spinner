@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   value5 = 12.25;
 
   ngOnInit() {
-    // tslint:disable-next-line: no-console
+    // eslint-disable-next-line no-console
     console.info(
       'I am developing those modules on my own, in my free time. ' +
       'It is very time consuming to deliver quality code.\n' +
