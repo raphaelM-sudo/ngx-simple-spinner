@@ -1,4 +1,5 @@
 declare global {
+  // eslint-disable-next-line id-blacklist
   interface Number {
     toFixedNoRounding: (fractionDigits?: number) => number;
   }
@@ -16,8 +17,8 @@ Number.prototype.toFixedNoRounding = function(fractionDigits = 0): number {
 };
 
 export enum Round {
-  Up,
-  Down
+  up,
+  down
 }
 
 export class SimpleDecimal {
@@ -115,6 +116,52 @@ export class SimpleDecimal {
     return '' + this.divisor;
   }
 
+  constructor(maxDecimalPlaces: (() => number) | number, value: number = null) {
+    this._maxDecimalPlacesFn = maxDecimalPlaces instanceof Function ? maxDecimalPlaces : () => maxDecimalPlaces;
+    this.value = value;
+  }
+
+  toString(): string {
+    if (this.value != null) {
+      return String(this.value).replace(',', '.');
+    } else {
+      return '';
+    }
+  }
+
+  add(i: number): SimpleDecimal {
+    this.value += i;
+    return this;
+  }
+
+  sub(i: number): SimpleDecimal {
+    this.value -= i;
+    return this;
+  }
+
+  toNearest(multiple: number, roundMode: Round = Round.up): number {
+
+    multiple = +multiple.toFixed(this.maxDecimalPlaces);
+
+    if (multiple > 0 && this.value != null) {
+
+      let quotient = +(this.decimalPart / multiple).toFixed(this.maxDecimalPlaces);
+
+      switch (roundMode) {
+        case Round.down:
+          quotient = Math.ceil(quotient) - 1;
+          break;
+        default:
+          quotient = Math.floor(quotient) + 1;
+          break;
+      }
+
+      return +(this.integerPart + (multiple * quotient)).toFixed(this.maxDecimalPlaces);
+    }
+
+    return this.value;
+  }
+
   private calculateFraction() {
 
     if (this.maxDecimalPlaces >= 2 && !(this._dividend && this._divisor) ) {
@@ -148,51 +195,5 @@ export class SimpleDecimal {
         }
       }
     }
-  }
-
-  toString(): string {
-    if (this.value != null) {
-      return String(this.value).replace(',', '.');
-    } else {
-      return '';
-    }
-  }
-
-  add(i: number): SimpleDecimal {
-    this.value += i;
-    return this;
-  }
-
-  sub(i: number): SimpleDecimal {
-    this.value -= i;
-    return this;
-  }
-
-  toNearest(multiple: number, roundMode: Round = Round.Up): number {
-
-    multiple = +multiple.toFixed(this.maxDecimalPlaces);
-
-    if (multiple > 0 && this.value != null) {
-
-      let quotient = +(this.decimalPart / multiple).toFixed(this.maxDecimalPlaces);
-
-      switch (roundMode) {
-        case Round.Down:
-          quotient = Math.ceil(quotient) - 1;
-          break;
-        default:
-          quotient = Math.floor(quotient) + 1;
-          break;
-      }
-
-      return +(this.integerPart + (multiple * quotient)).toFixed(this.maxDecimalPlaces);
-    }
-
-    return this.value;
-  }
-
-  constructor(maxDecimalPlaces: (() => number) | number, value: number = null) {
-    this._maxDecimalPlacesFn = maxDecimalPlaces instanceof Function ? maxDecimalPlaces : () => maxDecimalPlaces;
-    this.value = value;
   }
 }

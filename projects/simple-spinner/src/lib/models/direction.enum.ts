@@ -1,5 +1,5 @@
 export enum Direction {
-  Default,
-  LeftToRight,
-  RightToLeft
+  default,
+  leftToRight,
+  rightToLeft
 }
