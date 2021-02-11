@@ -44,7 +44,6 @@ const _SimpleSpinnerMixinBase:
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[attr.id]': 'id',
-    '[attr.tabindex]': 'tabIndex',
     class: 'simple-spinner',
     role: 'input',
     '[attr.aria-label]': 'ariaLabel',

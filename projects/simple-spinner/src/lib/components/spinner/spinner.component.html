@@ -9,7 +9,7 @@
       <span>{{placeholder}}</span>
     </div>
     <div [ngClass]="{'simple-spinner-inactive': showFractionOverlay}" class="simple-spinner-input">
-      <input #numberInput type="number"
+      <input #numberInput type="number" tabindex="{{tabIndex}}"
         [value]="value"
         (change)="changeInput()"
         (keydown)="filterKey($event)"
@@ -26,7 +26,7 @@
     </div>
   </div>
   <div *ngIf="showNav" class="simple-spinner-nav">
-    <button [disabled]="disabled" class="simple-spinner-arrow simple-spinner-arrow-up" (mousedown)="add()" (mouseup)="stopCount()" (mouseleave)="stopCount()"></button>
-    <button [disabled]="disabled" class="simple-spinner-arrow simple-spinner-arrow-down" (mousedown)="subtract()" (mouseup)="stopCount()" (mouseleave)="stopCount()"></button>
+    <button [disabled]="disabled" class="simple-spinner-arrow simple-spinner-arrow-up" (mousedown)="add()" (mouseup)="stopCount()" (mouseleave)="stopCount()" tabindex="-1"></button>
+    <button [disabled]="disabled" class="simple-spinner-arrow simple-spinner-arrow-down" (mousedown)="subtract()" (mouseup)="stopCount()" (mouseleave)="stopCount()" tabindex="-1"></button>
   </div>
 </div>
