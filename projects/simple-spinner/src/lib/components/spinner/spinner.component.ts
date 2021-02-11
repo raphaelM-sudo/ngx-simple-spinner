@@ -177,7 +177,7 @@ implements ControlValueAccessor, DoCheck, CanDisable, HasTabIndex, CanUpdateErro
   }
 
   get showFractionOverlay() {
-    return this.decimal.hasPrettyFraction && this.fractions && (this.disabled || !this.hover && !this.focus);
+    return this.decimal.hasPrettyFraction && this.fractions && !this.focus && (this.disabled || !this.hover);
   }
 
   get showPlaceholder() {

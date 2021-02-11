@@ -8,7 +8,7 @@
     <div *ngIf="showPlaceholder" class="simple-spinner-placeholder">
       <span>{{placeholder}}</span>
     </div>
-    <div [hidden]="showFractionOverlay" class="simple-spinner-input">
+    <div [ngClass]="{'simple-spinner-inactive': showFractionOverlay}" class="simple-spinner-input">
       <input #numberInput type="number"
         [value]="value"
         (change)="changeInput()"
